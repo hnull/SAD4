@@ -1,5 +1,7 @@
 package Model;
 
+import Service.DB;
+
 import java.util.List;
 
 public class Presentation {
@@ -32,5 +34,14 @@ public class Presentation {
 
     public void setProfessor(Professor professor) {
         this.professor = professor;
+    }
+
+    public void showStudentsId() {
+        int i = 1;
+        System.out.println("-----------------------------------------");
+        for(StudentCourse studentCourse : students) {
+            System.out.println(i++ + ". id :" + studentCourse.getStudent().getId());
+        }
+        System.out.println("-----------------------------------------");
     }
 }

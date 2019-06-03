@@ -1,5 +1,8 @@
 package FASAD;
 
+import Model.LifeCycle;
+import Service.DB;
+
 import java.util.Scanner;
 
 public class CommandHandler {
@@ -18,6 +21,28 @@ public class CommandHandler {
             case "getExams":
                 controller.getExams();
                 break;
+            case "selectExam":
+                System.out.print("exam id : ");
+                int examId = scanner.nextInt();
+                controller.selectExam(examId);
+                break;
+            case "setStudentPresence":
+                System.out.print("student id : ");
+                int studentId = scanner.nextInt();
+                controller.selectStudent(studentId);
+                break;
+            case "finishExam":
+                System.out.println("exam presentation process finished");
+                DB.lifeCycle = LifeCycle.examFinished;
+                break;
+            case "signByProfessor":
+                System.out.print("professor id : ");
+                int profId = scanner.nextInt();
+                controller.signByProfessor(profId);
+                controller.sendExamPresetationData();
+                break;
+            default:
+                System.out.println("unknown method");
         }
     }
 }
