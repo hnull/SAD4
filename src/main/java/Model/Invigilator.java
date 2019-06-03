@@ -5,7 +5,16 @@ public class Invigilator {
     private String lastName;
     private String userName;
     private String password;
+    private boolean isLogin;
     private int IId;
+
+    public Invigilator(String firstName, String lastName, String userName, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+        this.isLogin = false;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -45,5 +54,13 @@ public class Invigilator {
 
     public void setIId(int IId) {
         this.IId = IId;
+    }
+
+    public boolean isLogin() {
+        return isLogin;
+    }
+
+    public void setLogin(boolean login) {
+        isLogin = login;
     }
 }

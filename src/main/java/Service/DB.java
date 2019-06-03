@@ -1,5 +1,6 @@
 package Service;
 
+import Model.Invigilator;
 import Model.Presentation;
 import Model.Professor;
 import Model.Student;
@@ -11,6 +12,7 @@ public class DB {
     public static List<Presentation> presentations = new ArrayList<Presentation>();
     public static List<Student> students = new ArrayList<Student>();
     public static List<Professor> professors = new ArrayList<Professor>();
+    public static Invigilator currnetUser = new Invigilator("گیتا", "نصیری", "nasiri", "123");
 
     public static Professor findProfessor(int id) {
         for(Professor p : professors) {

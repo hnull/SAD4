@@ -31,6 +31,8 @@ public class JsonParser {
             exam.setExamId(Integer.parseInt(jo.get("exam_id").toString()));
             ClassRoom classRoom = new ClassRoom(Integer.parseInt(jo.get("room_number").toString()));
             exam.classRoom = classRoom;
+            Course course = new Course((String)jo.get("course_name"));
+            ps.course = course;
             ps.exam = exam;
 
             addProfessor((JSONObject)jo.get("professor"), ps);
