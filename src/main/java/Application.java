@@ -12,6 +12,7 @@ public class Application {
     public static void main(String [] args) throws IOException {
         String json = new HttpClientGet().HttpGetRequest();
         DB.presentations = JsonParser.parse(json);
+        System.out.println("please login first");
         while(true) {
             CommandHandler.handle();
         }

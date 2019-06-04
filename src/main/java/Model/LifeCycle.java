@@ -6,5 +6,4 @@ public enum LifeCycle {
     examSelected,
     examFinished,
     signByProfessor,
-    dataSend
 }

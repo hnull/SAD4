@@ -38,8 +38,8 @@ public class CommandHandler {
             case "signByProfessor":
                 System.out.print("professor id : ");
                 int profId = scanner.nextInt();
-                controller.signByProfessor(profId);
-                controller.sendExamPresetationData();
+                if(controller.signByProfessor(profId))
+                    controller.sendExamPresetationData();
                 break;
             default:
                 System.out.println("unknown method");

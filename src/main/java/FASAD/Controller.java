@@ -2,10 +2,15 @@ package FASAD;
 
 import Model.*;
 import Service.DB;
+import Service.HttpClientGet;
+import Service.RunnableSend;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Controller implements FASAD {
     public void login(String username, String password) {
@@ -54,6 +59,12 @@ public class Controller implements FASAD {
             System.out.println("can not find exam with id : " + id);
             return;
         }
+        if(DB.currentExam.signedByProfessor == true) {
+            System.out.println("exam with id " + DB.currentExam.getExamId() + " has been finished");
+            DB.lifeCycle = LifeCycle.loggedIn;
+            DB.currentExam = null;
+            return;
+        }
         DB.lifeCycle = LifeCycle.examSelected;
     }
 
@@ -73,30 +84,39 @@ public class Controller implements FASAD {
         }
     }
 
-    public void signByProfessor(int id) {
+    public boolean signByProfessor(int id) {
         if(DB.lifeCycle != LifeCycle.examFinished) {
             System.out.println("please select exam first");
-            return;
+            return false;
         }
         Professor prof = DB.currentExam.findProfessor();
         if(prof.getId() != id) {
             System.out.println("prof id not match with prof's id of class");
-            return;
+            return false;
         }
         DB.currentExam.signedByProfessor = true;
         DB.lifeCycle = LifeCycle.signByProfessor;
+        return true;
     }
 
     public void sendExamPresetationData() {
-        JSONObject jo = new JSONObject();
         List<Integer> presentStudId = new ArrayList<>();
         for(StudentCourse student : DB.currentExam.getStudens()) {
             if(student.isPresent())
                 presentStudId.add(student.getStudent().getId());
         }
-        jo.put("exam_id", DB.currentExam.getExamId());
-        jo.put("is_teacher_signed", DB.currentExam.signedByProfessor);
-        jo.put("present_students_list", presentStudId);
-        System.out.println(jo);
+        StringBuilder data = new StringBuilder("{ \"exam_id\": " + DB.currentExam.getExamId() + " ," +
+                "\"is_teacher_signed\": " + (DB.currentExam.signedByProfessor ? "\"true\"": "\"false\"") + " ," +
+                "\"present_students_list\": [");
+        for (Integer sid :
+                presentStudId) {
+            data.append(" ").append(sid).append(",");
+        }
+        data.append("]}");
+        System.out.println("json sent to server is : " + data);
+        RunnableSend myRunnable = new RunnableSend(data);
+        Thread t = new Thread(myRunnable);
+        t.start();
+        DB.lifeCycle = LifeCycle.loggedIn;
     }
 }
