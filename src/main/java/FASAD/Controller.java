@@ -2,15 +2,10 @@ package FASAD;
 
 import Model.*;
 import Service.DB;
-import Service.HttpClientGet;
 import Service.RunnableSend;
-import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Controller implements FASAD {
     public void login(String username, String password) {
@@ -80,8 +75,10 @@ public class Controller implements FASAD {
                 System.out.print("firstname : " + student.getStudent().getFirstName());
                 System.out.println(" lastname : " + student.getStudent().getLastName());
                 student.setPresent(true);
+                return;
             }
         }
+        System.out.println("can not find student in this exam");
     }
 
     public boolean signByProfessor(int id) {
@@ -97,6 +94,19 @@ public class Controller implements FASAD {
         DB.currentExam.signedByProfessor = true;
         DB.lifeCycle = LifeCycle.signByProfessor;
         return true;
+    }
+
+    public void addStudentManuall(int studentId, int chairNum) {
+        if(DB.lifeCycle != LifeCycle.examSelected) {
+            System.out.println("please select exam first");
+            return;
+        }
+        Student student = new Student();
+        student.setId(studentId);
+        StudentCourse studentCourse = new StudentCourse(chairNum);
+        studentCourse.setPresent(true);
+        studentCourse.setStudent(student);
+        DB.currentExam.getStudens().add(studentCourse);
     }
 
     public void sendExamPresetationData() {

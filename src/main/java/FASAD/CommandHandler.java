@@ -31,6 +31,14 @@ public class CommandHandler {
                 int studentId = scanner.nextInt();
                 controller.selectStudent(studentId);
                 break;
+            case "setStudentManuall":
+                System.out.print("student id : ");
+                studentId = scanner.nextInt();
+                System.out.print("chair number : ");
+                int chairNum = scanner.nextInt();
+                controller.addStudentManuall(studentId, chairNum);
+                System.out.println("student with id : " + studentId + " and chair number : " + chairNum + " presence added");
+                break;
             case "finishExam":
                 System.out.println("exam presentation process finished");
                 DB.lifeCycle = LifeCycle.examFinished;
